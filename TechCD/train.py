@@ -103,23 +103,14 @@ def validate(net, epoch):
         pred_all += output.to(torch.device('cpu')).tolist()
         label_all += labels.to(torch.device('cpu')).tolist()
 
-    pred_all = np.array(pred_all)
     label_all = np.array(label_all)
-    # compute accuracy
-    accuracy = correct_count / exer_count
-    # compute RMSE
-    rmse = np.sqrt(np.mean((label_all - pred_all) ** 2))
-    # compute AUC
-    auc = roc_auc_score(label_all, pred_all)
-    mae = np.mean(np.sqrt((label_all - pred_all) ** 2))
     binary_pre = np.array(binary_pre)
     f1 = f1_score(label_all, binary_pre)
-    precision = precision_score(label_all, binary_pre)
-    recall = recall_score(label_all, binary_pre)
-    print('domain: %s, accuracy= %f, rmse= %f, auc= %f, f1_score=%f, precision=%f, recall=%f, mae=%f' % (data, accuracy, rmse, auc, f1, precision, recall, mae))
+    print('domain: %s, f1_score=%f' % (
+        data, f1))
     with open('./result/' + data + '/model_val.txt', 'a', encoding='utf8') as f:
-        f.write('epoch= %d, accuracy= %f, rmse= %f, auc= %f, f1_score=%f, precision=%f, recall=%f, mae=%f\n' % (epoch+1, accuracy, rmse, auc, f1, precision, recall,mae))
-    return rmse, auc
+        f.write('epoch= %d, f1_score=%f\n' % (epoch + 1, f1))
+    return f1
 
 def save_snapshot(model, filename):
     f = open(filename, 'wb')

@@ -30,9 +30,7 @@ class Net(nn.Module):
         for name, param in self.named_parameters():
             if 'weight' in name:
                 nn.init.xavier_normal_(param)
-        # nn.init.zeros_(self.student_emb.weight)
-        # nn.init.zeros_(self.k_difficulty.weight)
-        # nn.init.zeros_(self.e_discrimination.weight)
+
 
     def forward(self, stu_id, exer_id, kn_emb):
         '''
@@ -42,9 +40,6 @@ class Net(nn.Module):
         :return: FloatTensor, the probabilities of answering correctly
         '''
         # before prednet
-        # stu_emb = torch.sigmoid(self.student_emb(stu_id))
-        # k_difficulty = torch.sigmoid(self.k_difficulty(exer_id))
-
         stu_emb = self.student_emb(stu_id)
         k_difficulty = self.k_difficulty(exer_id)
         e_discrimination = torch.sigmoid(self.e_discrimination(exer_id)) * 5
@@ -52,13 +47,7 @@ class Net(nn.Module):
         input_x = torch.sum(e_discrimination * stu_emb, dim=1, keepdim=True) + k_difficulty
         # input_x = self.prednet_full1(input_x)
         # input_x = self.prednet_full2(input_x)
-        # print (e_discrimination.shape)
-        # print (stu_emb.shape)
-        # print (torch.sum(e_discrimination * stu_emb, dim=1).shape)
-        # print (input_x.shape)
         output = torch.sigmoid(input_x)
-        # print (output)
-
         return output
 
     def apply_clipper(self):
