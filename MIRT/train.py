@@ -55,8 +55,8 @@ def train():
                 running_loss = 0.0
 
         # validate and save current model every epoch
-        rmse, auc = validate(net, epoch)
         save_snapshot(net, './model/' + data + '/model_epoch' + str(epoch + 1))
+        validate(net, epoch)
 
 
 def validate(model, epoch):

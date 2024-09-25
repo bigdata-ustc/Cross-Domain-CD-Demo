@@ -69,7 +69,7 @@ def train():
 
         # validate and save current model every epoch
         save_snapshot(net, './model/' + data + '/model_epoch' + str(epoch + 1))
-        rmse, auc = validate(net, epoch)
+        validate(net, epoch)
 
 
 def validate(net, epoch):
